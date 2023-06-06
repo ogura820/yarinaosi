@@ -33,6 +33,21 @@ describe 'タスク管理機能', type: :system do
         expect(task_first.text).to include("task 3")
       end
     end
+    context '終了期限でソートするというリンクを押した場合' do
+      it '終了期限の降順に並び替えられたタスク一覧が表示される' do
+        3.times do |n|
+          FactoryBot.create(:task, period: DateTime.new(2022, 8, 10 - n , 10, 30))
+        end
+        visit tasks_path
+        click_link '終了期限でソートする'
+        task_list = all('.task_period') 
+        expect(task_list).not_to be_empty 
+        task_first = task_list[0]
+        puts task_first.text
+        expect(task_first.text).to include("2021")
+        # 一番終了期限が早いのはFactoryBotの初期値の2021のデータ
+      end
+    end
   end
 
   describe '新規作成機能' do

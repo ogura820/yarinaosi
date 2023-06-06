@@ -13,7 +13,7 @@
     <td class= "task_row" %><%= task.substance %></td>
     <td><%= task.content %></td>
     <% if task.period %>
-      <td><%= task.period.strftime("%Y-%m-%d %H:%M") %></td>
+      <td class= "task_period" %><%= task.period.strftime("%Y-%m-%d %H:%M") %></td>
       <% else %>
       <td><%= "期限設定なし" %>
     <% end %>
@@ -24,4 +24,4 @@
 <% end %>
 
 <%= link_to '新規投稿', new_task_path %><BR>
-<%= link_to "終了期限が近い順に並び替え", tasks_path(sort_expired: "true") %>
+<%= link_to "終了期限でソートする", tasks_path(sort_expired: "true") %>
