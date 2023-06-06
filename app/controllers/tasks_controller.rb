@@ -1,7 +1,10 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.all
-    @tasks_newest_to_oldest = Task.order('created_at DESC')
+    @tasks = Task.order('created_at DESC') 
+    if params[:sort_expired]
+      @tasks = Task.reorder('period') 
+    end
+
   end
 
   def new

@@ -8,7 +8,7 @@
     <th>終了期限</th>
   </tr>
 
-<% @tasks_newest_to_oldest.each do |task| %>
+<% @tasks.each do |task| %>
   <tr>
     <td class= "task_row" %><%= task.substance %></td>
     <td><%= task.content %></td>
@@ -23,4 +23,5 @@
   </tr>
 <% end %>
 
-<%= link_to '新規投稿', new_task_path %>
+<%= link_to '新規投稿', new_task_path %><BR>
+<%= link_to "終了期限が近い順に並び替え", tasks_path(sort_expired: "true") %>
