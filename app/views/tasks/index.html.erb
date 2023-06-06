@@ -5,12 +5,18 @@
   <tr>
     <th>タスク名</th>
     <th>内容</th>
+    <th>終了期限</th>
   </tr>
 
 <% @tasks_newest_to_oldest.each do |task| %>
   <tr>
     <td class= "task_row" %><%= task.substance %></td>
     <td><%= task.content %></td>
+    <% if task.period %>
+      <td><%= task.period.strftime("%Y-%m-%d %H:%M") %></td>
+      <% else %>
+      <td><%= "期限設定なし" %>
+    <% end %>
     <td><%= link_to '詳細', task_path(task.id) %></td>
     <td><%= link_to "編集", edit_task_path(task.id) %></td>
     <td><%= link_to '削除', task_path(task.id), method: :delete ,data: { confirm: '本当に削除していいですか？' } %></td>

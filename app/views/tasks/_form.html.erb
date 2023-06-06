@@ -18,7 +18,12 @@
     <%= form.label :詳細 %>
     <%= form.text_field :content %>
   </div>
+  <div class="task_period">
+  <%= form.label :終了期限 %>
+  <%= form.datetime_field :period %>
+</div>
   <%= form.submit %>
 <% end %>
 
 <%= link_to '一覧画面に戻る', tasks_path %>
+
