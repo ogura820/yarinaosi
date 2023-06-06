@@ -1,5 +1,40 @@
 require 'rails_helper'
-RSpec.describe 'タスク管理機能', type: :system do
+describe 'タスク管理機能', type: :system do
+  describe '一覧表示機能' do
+    let!(:task) { FactoryBot.create(:task, substance: 'task') }
+    before do
+      # 「一覧画面に遷移した場合」や「タスクが作成日時の降順に並んでいる場合」など、contextが実行されるタイミングで、before内のコードが実行される
+      visit tasks_path
+    end
+    context '一覧画面に遷移した場合' do
+      it '作成済みのタスク一覧が表示される' do
+        # テストで使用するためのタスクを作成
+        # task = FactoryBot.create(:task, substance: 'task')
+        # taskだけの記述もいらない(let!は即時実行されるため)
+        # visitした（遷移した）page（タスク一覧ページ）に「task」という文字列が
+        # visit tasks_path
+        # have_contentされているか（含まれているか）ということをexpectする（確認・期待する）
+        expect(page).to have_content'task'
+        # expectの結果が true ならテスト成功、false なら失敗として結果が出力される
+      end
+    end
+    context 'タスクが作成日時の降順に並んでいる場合' do
+      it '新しいタスクが一番上に表示される' do
+        #5.times do
+        #  task
+        #end  だと上書きされて１つしかできない
+        3.times do |n|
+          FactoryBot.create(:task, substance: "task #{n+1}")
+        end
+        visit tasks_path
+        task_list = all('.task_row') 
+        expect(task_list).not_to be_empty 
+        task_first = task_list[0]
+        expect(task_first.text).to include("task 3")
+      end
+    end
+  end
+
   describe '新規作成機能' do
     context 'タスクを新規作成した場合' do
       it '作成したタスクが表示される' do
@@ -10,25 +45,12 @@ RSpec.describe 'タスク管理機能', type: :system do
       fill_in 'task[substance]', with: 'タスク名です'
       fill_in 'task[content]', with: '詳細内容です'
       # 3. 「登録する」というvalue（表記文字）のあるボタンをクリックする
-      click_button('Create Task')
+      click_button('登録する')
       # 4. clickで登録されたはずの情報が、タスク詳細ページに表示されているかを確認する
       expect(page).to have_content'タスク名です'
       expect(page).to have_content'詳細内容です'
       # expect(page).to have_content'これがコメントアウトされていないと失敗'
       end
-    end
-  end
-
-  context '一覧画面に遷移した場合' do
-    it '作成済みのタスク一覧が表示される' do
-      # テストで使用するためのタスクを作成
-      task = FactoryBot.create(:task, substance: 'task')
-      # taskだけの記述もいらない(let!は即時実行されるため)
-      # visitした（遷移した）page（タスク一覧ページ）に「task」という文字列が
-      visit tasks_path
-      # have_contentされているか（含まれているか）ということをexpectする（確認・期待する）
-      expect(page).to have_content'task'
-      # expectの結果が true ならテスト成功、false なら失敗として結果が出力される
     end
   end
 
@@ -43,4 +65,5 @@ RSpec.describe 'タスク管理機能', type: :system do
       end
     end
   end
+
 end
