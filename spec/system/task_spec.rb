@@ -48,6 +48,19 @@ describe 'タスク管理機能', type: :system do
         # 一番終了期限が早いのはFactoryBotの初期値の2021のデータ
       end
     end
+    context '優先順位でソートするというリンクを押した場合' do
+      it '優先順位の高い順に並び替えられたタスク一覧が表示される' do
+        FactoryBot.create(:task, priority: "低")
+        FactoryBot.create(:task, priority: "中")
+        FactoryBot.create(:task, priority: "高")
+        visit tasks_path
+        click_link '優先順位でソートする'
+        task_list = all('.task_priority') 
+        expect(task_list).not_to be_empty 
+        task_first = task_list[0]
+        expect(task_first.text).to include("高")
+      end
+    end
   end
 
   describe '新規作成機能' do
