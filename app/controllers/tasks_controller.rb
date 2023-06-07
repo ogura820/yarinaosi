@@ -47,7 +47,7 @@ class TasksController < ApplicationController
   private
 
   def tasks_params
-    params.require(:task).permit(:substance, :content, :period)
+    params.require(:task).permit(:substance, :content, :period, :state_for_progress)
   end
 
 end

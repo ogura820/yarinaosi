@@ -22,6 +22,10 @@
   <%= form.label :終了期限 %>
   <%= form.datetime_field :period %>
 </div>
+<div class="task_state_for_progress">
+<%= form.label :ステータス %>
+<%= form.select :state_for_progress, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "選択して下さい" %>
+</div>
   <%= form.submit %>
 <% end %>
 

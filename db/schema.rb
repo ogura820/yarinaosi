@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_06_064829) do
+ActiveRecord::Schema.define(version: 2023_06_07_024235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2023_06_06_064829) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "period"
+    t.string "state_for_progress"
   end
 
 end
