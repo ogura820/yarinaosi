@@ -2,7 +2,13 @@ class TasksController < ApplicationController
   def index
     @tasks = Task.order('created_at DESC') 
     if params[:sort_expired]
-      @tasks = Task.reorder('period') 
+      @tasks = @tasks.reorder('period') 
+    elsif params[:search_substance && :search_state_for_progress]
+      @tasks = @tasks.search_by_substance(params[:search_substance])
+      if params[:search_state_for_progress].present?
+        @tasks = @tasks.search_by_state_for_progress(params[:search_state_for_progress])
+      end
+    else 
     end
 
   end
