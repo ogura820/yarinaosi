@@ -92,6 +92,7 @@ describe 'タスク管理機能', type: :system do
         # 必要に応じて、テストデータの内容を変更して構わない
         FactoryBot.create(:task, substance: "taskですよ", state_for_progress: "未着手")
         FactoryBot.create(:task, substance: "sampleなんです", state_for_progress: "完了")
+        FactoryBot.create(:task, substance: "taskなんです", state_for_progress: "完了")
       end
   
       context 'タイトルであいまい検索をした場合' do
@@ -102,6 +103,7 @@ describe 'タスク管理機能', type: :system do
           # 検索ボタンを押す
           click_button 'Search'
           expect(page).to have_content 'task'
+          expect(page).to have_no_content 'sample'
         end
       end
       context 'ステータス検索をした場合' do
@@ -111,11 +113,20 @@ describe 'タスク管理機能', type: :system do
           select desired_option, from: 'progress_keyword'
           click_button 'Search'
           expect(page).to have_content '未着手'
+          expect(page).to have_no_content 'sampleなんです'
+          expect(page).to have_no_content 'taskなんです'
         end
       end
       context 'タイトルのあいまい検索とステータス検索をした場合' do
         it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスク絞り込まれる" do
-          # ここに実装する
+          visit tasks_path
+          desired_option = '完了'
+          select desired_option, from: 'progress_keyword'
+          fill_in 'substance_keyword', with: 'task'
+          click_button 'Search'
+          expect(page).to have_content 'taskなんです'
+          expect(page).to have_no_content 'taskですよ'
+          expect(page).to have_no_content 'sampleなんです'
         end
       end
     end
