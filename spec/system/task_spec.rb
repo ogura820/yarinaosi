@@ -60,6 +60,8 @@ describe 'タスク管理機能', type: :system do
       fill_in 'task[substance]', with: 'タスク名です'
       fill_in 'task[content]', with: '詳細内容です'
       fill_in 'task[period]', with: DateTime.new(2021, 8, 1, 10, 30)
+      desired_option = '着手中'
+      select desired_option, from: 'task_state_for_progress'
       # 3. 「登録する」というvalue（表記文字）のあるボタンをクリックする
       click_button('登録する')
       # 4. clickで登録されたはずの情報が、タスク詳細ページに表示されているかを確認する
@@ -68,6 +70,7 @@ describe 'タスク管理機能', type: :system do
       # expect(page).to have_content'これがコメントアウトされていないと失敗'
       expect(page).to have_content'2021-08-01 10:30'
       # https://higmonta.hatenablog.com/entry/2021/07/22/030109
+      expect(page).to have_content'着手中'
       end
     end
   end
