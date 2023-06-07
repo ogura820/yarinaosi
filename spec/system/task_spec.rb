@@ -90,8 +90,8 @@ describe 'タスク管理機能', type: :system do
     describe '検索機能' do
       before do
         # 必要に応じて、テストデータの内容を変更して構わない
-        FactoryBot.create(:task, substance: "taskですよ")
-        FactoryBot.create(:task, substance: "sampleなんです")
+        FactoryBot.create(:task, substance: "taskですよ", state_for_progress: "未着手")
+        FactoryBot.create(:task, substance: "sampleなんです", state_for_progress: "完了")
       end
   
       context 'タイトルであいまい検索をした場合' do
@@ -106,8 +106,11 @@ describe 'タスク管理機能', type: :system do
       end
       context 'ステータス検索をした場合' do
         it "ステータスに完全一致するタスクが絞り込まれる" do
-          # ここに実装する
-          # プルダウンを選択する「select」について調べてみること
+          visit tasks_path
+          desired_option = '未着手'
+          select desired_option, from: 'progress_keyword'
+          click_button 'Search'
+          expect(page).to have_content '未着手'
         end
       end
       context 'タイトルのあいまい検索とステータス検索をした場合' do
