@@ -23,4 +23,37 @@ RSpec.describe 'タスクモデル機能', type: :model do
       end
     end
   end
+
+  describe '検索機能' do
+    # 必要に応じて、テストデータの内容を変更して構わない
+    let!(:task) { FactoryBot.create(:task, substance: 'task') }
+    let!(:second_task) { FactoryBot.create(:task, substance: "sample") }
+    let!(:third_task) { FactoryBot.create(:task, substance: "sample", state_for_progress: "完了")}
+    context 'scopeメソッドでタイトルのあいまい検索をした場合' do
+      it "検索キーワードを含むタスクが絞り込まれる" do
+        expect(Task.search_by_substance('task')).to include(task)
+        expect(Task.search_by_substance('task')).not_to include(second_task)
+        expect(Task.search_by_substance('task').count).to eq 1
+      end
+    end
+    context 'scopeメソッドでステータス検索をした場合' do
+      it "ステータスに完全一致するタスクが絞り込まれる" do
+        expect(Task.search_by_state_for_progress('未着手')).to include(task)
+        expect(Task.search_by_state_for_progress('未着手')).to include(second_task)
+        expect(Task.search_by_state_for_progress('完了')).to include(third_task)
+        expect(Task.search_by_state_for_progress('完了').count).to eq 1
+        expect(Task.search_by_state_for_progress('未着手').count).to eq 2
+      end
+    end
+    context 'scopeメソッドでタイトルのあいまい検索とステータス検索をした場合' do
+      it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスク絞り込まれる" do
+        expect(Task.search_by_substance('sample')
+                    .search_by_state_for_progress('完了')).to include(third_task)
+        expect(Task.search_by_substance('sample')
+                    .search_by_state_for_progress('完了').count).to eq 1
+        expect(Task.search_by_substance('sample')
+                    .search_by_state_for_progress('完了').count).not_to eq 2
+      end
+    end
+  end
 end
