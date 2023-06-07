@@ -4,5 +4,6 @@ FactoryBot.define do
     content { 'test_content' }
     period { DateTime.new(2021, 8, 1, 10, 30) }
     state_for_progress { '未着手'}
+    priority { '中' }
   end
 end
