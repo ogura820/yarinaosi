@@ -3,12 +3,23 @@ class TasksController < ApplicationController
     @tasks = Task.order('created_at DESC') 
     if params[:sort_expired]
       @tasks = @tasks.reorder('period') 
-    elsif params[:search_substance && :search_state_for_progress]
-      @tasks = @tasks.search_by_substance(params[:search_substance])
-      if params[:search_state_for_progress].present?
-        @tasks = @tasks.search_by_state_for_progress(params[:search_state_for_progress])
-      end
-    else 
+    end
+
+    # if params[:substance_keyword && :progress_keyword]
+    #   @tasks = @tasks.search_by_substance(params[:substance_keyword])
+    #   if params[:progress_keyword].present?
+    #     @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
+    #   end
+    # else 
+    # end
+    # 最初に作ったコード。なにをしているのかわかりづらい？コードレビューで聞く候補
+    if params[:substance_keyword].present? && params[:progress_keyword].present?
+      @tasks = @tasks.search_by_substance(params[:substance_keyword])
+                      .search_by_state_for_progress(params[:progress_keyword])
+    elsif params[:substance_keyword].present?
+      @tasks = @tasks.search_by_substance(params[:substance_keyword])
+    elsif params[:progress_keyword].present?
+      @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
     end
 
   end

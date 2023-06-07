@@ -3,12 +3,14 @@
 
 
 <%= link_to '新規投稿', new_task_path %><BR>
-<%= link_to "終了期限でソートする", tasks_path(sort_expired: "true") %>
+<%= link_to "全タスク表示", tasks_path %>
+
+<%= link_to "終了期限でソートする", tasks_path(sort_expired: "true", substance_keyword: params[:substance_keyword], progress_keyword: params[:progress_keyword]) %>
 
 <%= form_with url: tasks_path, method: :get, local: true do |form| %>
   <%= form.label :タスク名検索 %>
-  <%= form.text_field :search_substance %>
-<%= form.select :search_state_for_progress, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "選択しない" %>
+  <%= form.text_field :substance_keyword %>
+<%= form.select :progress_keyword, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "選択しない" %>
   <%= form.submit 'Search', name: nil %>
 <% end %>
 
