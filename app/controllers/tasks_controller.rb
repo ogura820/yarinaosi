@@ -5,6 +5,10 @@ class TasksController < ApplicationController
       @tasks = @tasks.reorder('period') 
     end
 
+    if params[:sort_priority]
+      @tasks = @tasks.reorder('priority')
+    end
+
     # if params[:substance_keyword && :progress_keyword]
     #   @tasks = @tasks.search_by_substance(params[:substance_keyword])
     #   if params[:progress_keyword].present?
