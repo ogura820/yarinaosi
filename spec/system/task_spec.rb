@@ -87,4 +87,34 @@ describe 'タスク管理機能', type: :system do
     end
   end
 
+    describe '検索機能' do
+      before do
+        # 必要に応じて、テストデータの内容を変更して構わない
+        FactoryBot.create(:task, substance: "taskですよ")
+        FactoryBot.create(:task, substance: "sampleなんです")
+      end
+  
+      context 'タイトルであいまい検索をした場合' do
+        it "検索キーワードを含むタスクで絞り込まれる" do
+          visit tasks_path
+          # タスクの検索欄に検索ワードを入力する (例: task)
+          fill_in 'substance_keyword', with: 'task'
+          # 検索ボタンを押す
+          click_button 'Search'
+          expect(page).to have_content 'task'
+        end
+      end
+      context 'ステータス検索をした場合' do
+        it "ステータスに完全一致するタスクが絞り込まれる" do
+          # ここに実装する
+          # プルダウンを選択する「select」について調べてみること
+        end
+      end
+      context 'タイトルのあいまい検索とステータス検索をした場合' do
+        it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスク絞り込まれる" do
+          # ここに実装する
+        end
+      end
+    end
+
 end
