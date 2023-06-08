@@ -40,10 +40,11 @@ describe 'タスク管理機能', type: :system do
         end
         visit tasks_path
         click_link '終了期限でソートする'
+        sleep 1
+        #処理が早すぎて要素を取得できない？？？
         task_list = all('.task_period') 
         expect(task_list).not_to be_empty 
         task_first = task_list[0]
-        puts task_first.text
         expect(task_first.text).to include("2021")
         # 一番終了期限が早いのはFactoryBotの初期値の2021のデータ
       end

@@ -1,7 +1,6 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.order('created_at DESC')
-    @tasks = Task.page(params[:page]).per(10)
+    @tasks = Task.order('created_at DESC').page(params[:page]).per(10)
     if params[:sort_expired]
       @tasks = @tasks.reorder('period') 
     end
