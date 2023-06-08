@@ -1,7 +1,31 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.all
-    @tasks_newest_to_oldest = Task.order('created_at DESC')
+    @tasks = Task.order('created_at DESC').page(params[:page]).per(10)
+    if params[:sort_expired]
+      @tasks = @tasks.reorder('period') 
+    end
+
+    if params[:sort_priority]
+      @tasks = @tasks.reorder('priority')
+    end
+
+    # if params[:substance_keyword && :progress_keyword]
+    #   @tasks = @tasks.search_by_substance(params[:substance_keyword])
+    #   if params[:progress_keyword].present?
+    #     @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
+    #   end
+    # else 
+    # end
+    # 最初に作ったコード。なにをしているのかわかりづらい？コードレビューで聞く候補
+    if params[:substance_keyword].present? && params[:progress_keyword].present?
+      @tasks = @tasks.search_by_substance(params[:substance_keyword])
+                      .search_by_state_for_progress(params[:progress_keyword])
+    elsif params[:substance_keyword].present?
+      @tasks = @tasks.search_by_substance(params[:substance_keyword])
+    elsif params[:progress_keyword].present?
+      @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
+    end
+
   end
 
   def new
@@ -44,7 +68,7 @@ class TasksController < ApplicationController
   private
 
   def tasks_params
-    params.require(:task).permit(:substance, :content)
+    params.require(:task).permit(:substance, :content, :period, :state_for_progress, :priority)
   end
 
 end

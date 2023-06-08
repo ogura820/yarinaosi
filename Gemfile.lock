@@ -96,6 +96,18 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    kaminari (1.2.2)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.2)
+      kaminari-activerecord (= 1.2.2)
+      kaminari-core (= 1.2.2)
+    kaminari-actionview (1.2.2)
+      actionview
+      kaminari-core (= 1.2.2)
+    kaminari-activerecord (1.2.2)
+      activerecord
+      kaminari-core (= 1.2.2)
+    kaminari-core (1.2.2)
     launchy (2.5.2)
       addressable (~> 2.8)
     listen (3.8.0)
@@ -127,7 +139,6 @@ GEM
     nio4r (2.5.9)
     nokogiri (1.15.2-arm64-darwin)
       racc (~> 1.4)
-
     nokogiri (1.15.2-x86_64-linux)
       racc (~> 1.4)
     pg (1.5.3)
@@ -250,9 +261,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
-
   x86_64-linux
-
 
 DEPENDENCIES
   bootsnap (>= 1.4.4)
@@ -261,13 +270,12 @@ DEPENDENCIES
   factory_bot_rails
   faker
   jbuilder (~> 2.7)
+  kaminari
   launchy
   listen (~> 3.3)
-
   net-imap
   net-pop
   net-smtp
-
   pg (~> 1.1)
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)

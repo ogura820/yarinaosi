@@ -33,6 +33,35 @@ describe 'タスク管理機能', type: :system do
         expect(task_first.text).to include("task 3")
       end
     end
+    context '終了期限でソートするというリンクを押した場合' do
+      it '終了期限の降順に並び替えられたタスク一覧が表示される' do
+        3.times do |n|
+          FactoryBot.create(:task, period: DateTime.new(2022, 8, 10 - n , 10, 30))
+        end
+        visit tasks_path
+        click_link '終了期限でソートする'
+        sleep 1
+        #処理が早すぎて要素を取得できない？？？
+        task_list = all('.task_period') 
+        expect(task_list).not_to be_empty 
+        task_first = task_list[0]
+        expect(task_first.text).to include("2021")
+        # 一番終了期限が早いのはFactoryBotの初期値の2021のデータ
+      end
+    end
+    context '優先順位でソートするというリンクを押した場合' do
+      it '優先順位の高い順に並び替えられたタスク一覧が表示される' do
+        FactoryBot.create(:task, priority: "低")
+        FactoryBot.create(:task, priority: "中")
+        FactoryBot.create(:task, priority: "高")
+        visit tasks_path
+        click_link '優先順位でソートする'
+        task_list = all('.task_priority') 
+        expect(task_list).not_to be_empty 
+        task_first = task_list[0]
+        expect(task_first.text).to include("高")
+      end
+    end
   end
 
   describe '新規作成機能' do
@@ -44,12 +73,18 @@ describe 'タスク管理機能', type: :system do
       #「タスク名」というラベル名の入力欄と、「タスク詳細」というラベル名の入力欄にタスクのタイトルと内容をそれぞれ入力する
       fill_in 'task[substance]', with: 'タスク名です'
       fill_in 'task[content]', with: '詳細内容です'
+      fill_in 'task[period]', with: DateTime.new(2021, 8, 1, 10, 30)
+      desired_option = '着手中'
+      select desired_option, from: 'task_state_for_progress'
       # 3. 「登録する」というvalue（表記文字）のあるボタンをクリックする
       click_button('登録する')
       # 4. clickで登録されたはずの情報が、タスク詳細ページに表示されているかを確認する
       expect(page).to have_content'タスク名です'
       expect(page).to have_content'詳細内容です'
       # expect(page).to have_content'これがコメントアウトされていないと失敗'
+      expect(page).to have_content'2021-08-01 10:30'
+      # https://higmonta.hatenablog.com/entry/2021/07/22/030109
+      expect(page).to have_content'着手中'
       end
     end
   end
@@ -65,5 +100,49 @@ describe 'タスク管理機能', type: :system do
       end
     end
   end
+
+    describe '検索機能' do
+      before do
+        # 必要に応じて、テストデータの内容を変更して構わない
+        FactoryBot.create(:task, substance: "taskですよ", state_for_progress: "未着手")
+        FactoryBot.create(:task, substance: "sampleなんです", state_for_progress: "完了")
+        FactoryBot.create(:task, substance: "taskなんです", state_for_progress: "完了")
+      end
+  
+      context 'タイトルであいまい検索をした場合' do
+        it "検索キーワードを含むタスクで絞り込まれる" do
+          visit tasks_path
+          # タスクの検索欄に検索ワードを入力する (例: task)
+          fill_in 'substance_keyword', with: 'task'
+          # 検索ボタンを押す
+          click_button 'Search'
+          expect(page).to have_content 'task'
+          expect(page).to have_no_content 'sample'
+        end
+      end
+      context 'ステータス検索をした場合' do
+        it "ステータスに完全一致するタスクが絞り込まれる" do
+          visit tasks_path
+          desired_option = '未着手'
+          select desired_option, from: 'progress_keyword'
+          click_button 'Search'
+          expect(page).to have_content '未着手'
+          expect(page).to have_no_content 'sampleなんです'
+          expect(page).to have_no_content 'taskなんです'
+        end
+      end
+      context 'タイトルのあいまい検索とステータス検索をした場合' do
+        it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスク絞り込まれる" do
+          visit tasks_path
+          desired_option = '完了'
+          select desired_option, from: 'progress_keyword'
+          fill_in 'substance_keyword', with: 'task'
+          click_button 'Search'
+          expect(page).to have_content 'taskなんです'
+          expect(page).to have_no_content 'taskですよ'
+          expect(page).to have_no_content 'sampleなんです'
+        end
+      end
+    end
 
 end
