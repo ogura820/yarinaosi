@@ -1,4 +1,5 @@
 class Task < ApplicationRecord
+  belongs_to :user
   validates :substance, presence: true
   validates :content, presence: true
   scope :search_by_substance, -> (serch_keyword){where('substance LIKE ?', "%#{serch_keyword}%")}
