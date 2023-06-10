@@ -17,7 +17,7 @@ RSpec.describe 'タスクモデル機能', type: :model do
     end
     context 'タスクのタイトルと詳細に内容が記載されている場合' do
       it 'バリデーションが通る' do
-        task = Task.new(substance: '成功テスト', content: '成功する??')
+        task = Task.new(substance: '成功テスト', content: '成功する??',user: user)
         expect(task).to be_valid
         #substance,contentどちらかが空白だと失敗するのでテストコードは正しい
       end
