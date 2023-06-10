@@ -13,6 +13,23 @@ class UsersController < ApplicationController
     end
   end
 
+  def update
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      redirect_to user_path, notice: "ユーザー情報を編集しました！"
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @user = User.find(params[:id])
+    @user.destroy
+    redirect_to admin_users_path, notice: "ユーザーを削除しました！"
+  end
+
+
+
   def show
     if current_user == User.find(params[:id])
     @user = User.find(params[:id])
