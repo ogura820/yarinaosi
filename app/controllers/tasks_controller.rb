@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.order('created_at DESC').page(params[:page]).per(10)
+    @tasks = current_user.tasks.order('created_at DESC').page(params[:page]).per(10)
     if params[:sort_expired]
       @tasks = @tasks.reorder('period') 
     end
@@ -33,7 +33,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(tasks_params)
+    @task = current_user.tasks.build(tasks_params)
     if @task.save
       redirect_to tasks_path, notice: "タスクを新規投稿しました！"
     else
@@ -70,5 +70,4 @@ class TasksController < ApplicationController
   def tasks_params
     params.require(:task).permit(:substance, :content, :period, :state_for_progress, :priority)
   end
-
 end
