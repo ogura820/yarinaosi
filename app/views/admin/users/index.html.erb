@@ -1,4 +1,4 @@
-<h1>管理者様ユーザー一覧</h1>
+<h1>管理者用ユーザー一覧</h1>
 <p><%= notice %></p>
 
 
@@ -7,13 +7,15 @@
     <tr>
       <th>ID</th>
       <th>ユーザー名</th>
+      <th>管理者権限</th>
     </tr>
   </thead>
 
 <% @users.each do |user| %>
   <tr>
     <td><%= user.id %><%= user.name %></td><BR>
-    <td><%= user.name %></td><BR>
+    <td><%= user.name %></td><BR>    
+    <td><%= user.admin %></td><BR>
 
     <td><%= link_to '詳細', admin_user_path(user.id), class:"btn btn-outline-primary" %></td>
     <td><%= link_to "編集", edit_admin_user_path(user.id), class:"btn btn-outline-success" %></td>

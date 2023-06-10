@@ -2,7 +2,7 @@ class Admin::UsersController < ApplicationController
 before_action :require_admin
 
   def index
-    @users = User.select(:id, :name)
+    @users = User.select(:id, :name,:admin)
   end
 
   def new
