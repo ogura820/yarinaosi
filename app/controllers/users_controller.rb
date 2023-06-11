@@ -1,7 +1,11 @@
 class UsersController < ApplicationController
   skip_before_action :login_required, only: [:new, :create]
   def new
-    @user = User.new
+    if current_user.present?
+      redirect_to tasks_path
+    else
+      @user = User.new
+    end
   end
 
   def create
@@ -18,7 +22,7 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       redirect_to user_path, notice: "ユーザー情報を編集しました！"
     else
-      render :edit
+      redirect_to user_path
     end
   end
 
@@ -42,6 +46,6 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :email, :password,
-                                 :password_confirmation)
+                                 :password_confirmation,:admin)
   end
 end
