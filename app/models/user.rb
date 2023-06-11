@@ -9,4 +9,10 @@ class User < ApplicationRecord
                     format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i },
                     uniqueness: true
 
+  before_destroy :admin_cannot_delete
+
+  private
+  def admin_cannot_delete
+    throw :abort if User.where(admin: true).count == 1 && self.admin == true
+  end
 end

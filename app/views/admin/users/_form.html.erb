@@ -25,7 +25,11 @@
   <%= f.password_field :password_confirmation %>
   <BR>
   <%= f.label :管理者権限を付与 %>
-  <%= f.check_box :admin ,{}, true, false %>
+  <%= f.radio_button :admin, true %> <%= f.label :admin, "はい" %>
+  <% unless User.where(admin: true).count == 1 %>
+  <%= f.radio_button :admin, false %>  <%= f.label :admin, "いいえ" %>
+  <% end %>
+
   <BR>
   <%= f.submit %>
 <% end %>
