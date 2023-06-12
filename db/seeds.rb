@@ -10,3 +10,4 @@ User.all.each do |user|
     content: 'テキストテキストテキストテキスト'
   )
 end
+
