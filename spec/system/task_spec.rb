@@ -42,35 +42,35 @@ describe 'タスク管理機能', type: :system do
         expect(task_first.text).to include("task 3")
       end
     end
-    # context '終了期限でソートするというリンクを押した場合' do
-    #   it '終了期限の降順に並び替えられたタスク一覧が表示される' do
-    #     3.times do |n|
-    #       FactoryBot.create(:task, period: DateTime.new(2022, 8, 10 - n , 10, 30))
-    #     end
-    #     visit tasks_path
-    #     click_link '終了期限でソートする'
-    #     sleep 1
-    #     #処理が早すぎて要素を取得できない？？？
-    #     task_list = all('.task_period') 
-    #     expect(task_list).not_to be_empty 
-    #     task_first = task_list[0]
-    #     expect(task_first.text).to include("2021")
-    #     # 一番終了期限が早いのはFactoryBotの初期値の2021のデータ
-    #   end
-    # end
-    # context '優先順位でソートするというリンクを押した場合' do
-    #   it '優先順位の高い順に並び替えられたタスク一覧が表示される' do
-    #     FactoryBot.create(:task, priority: "低")
-    #     FactoryBot.create(:task, priority: "中")
-    #     FactoryBot.create(:task, priority: "高")
-    #     visit tasks_path
-    #     click_link '優先順位でソートする'
-    #     task_list = all('.task_priority') 
-    #     expect(task_list).not_to be_empty 
-    #     task_first = task_list[0]
-    #     expect(task_first.text).to include("高")
-    #   end
-    # end
+    context '終了期限でソートするというリンクを押した場合' do
+      it '終了期限の降順に並び替えられたタスク一覧が表示される' do
+        3.times do |n|
+          FactoryBot.create(:task, period: DateTime.new(2022, 8, 10 - n , 10, 30), user: user)
+        end
+        visit tasks_path
+        click_link '終了期限でソートする'
+        sleep 1
+        #処理が早すぎて要素を取得できない？？？
+        task_list = all('.task_period') 
+        expect(task_list).not_to be_empty 
+        task_first = task_list[0]
+        expect(task_first.text).to include("2021")
+        # 一番終了期限が早いのはFactoryBotの初期値の2021のデータ
+      end
+    end
+    context '優先順位でソートするというリンクを押した場合' do
+      it '優先順位の高い順に並び替えられたタスク一覧が表示される' do
+        FactoryBot.create(:task, priority: "低", user: user)
+        FactoryBot.create(:task, priority: "中", user: user)
+        FactoryBot.create(:task, priority: "高", user: user)
+        visit tasks_path
+        click_link '優先順位でソートする'
+        task_list = all('.task_priority') 
+        expect(task_list).not_to be_empty 
+        task_first = task_list[0]
+        expect(task_first.text).to include("高")
+      end
+    end
   end
 
   describe '新規作成機能' do
@@ -189,5 +189,97 @@ describe 'タスク管理機能', type: :system do
         end
       end
     end
+    
+    describe 'ラベル機能' do
+      let!(:user) { FactoryBot.create(:user) }
+      let!(:label) { FactoryBot.create(:label) }
+      let!(:label2) { FactoryBot.create(:label2) }
+      before do
+        # 「一覧画面に遷移した場合」や「タスクが作成日時の降順に並んでいる場合」など、contextが実行されるタイミングで、before内のコードが実行される
+        visit new_session_path
+        sleep 1
+        fill_in 'session[email]', with: 'test@gmail.com'
+        fill_in 'session[password]', with: 'password'
+        sleep 1
+        click_button 'Log in'
+        sleep 1
+        visit tasks_path
+        sleep 1
+      end
+    context 'タスクを新規作成時、ラベルを選択した場合' do
+      it '選択したラベルが表示される' do
+      visit new_task_path
+      fill_in 'task[substance]', with: 'タスク名です'
+      fill_in 'task[content]', with: '詳細内容です'
+      fill_in 'task[period]', with: DateTime.new(2021, 8, 1, 10, 30)
+      desired_option = '着手中'
+      select desired_option, from: 'task_state_for_progress'
+      check 'test_label1'
+      click_button('登録する')
+      expect(page).to have_content'test_label1'
+      end
+    end
+    context 'タスクを新規作成時、複数ラベルを選択した場合' do
+      it '選択したラベルが複数表示される' do
+        visit new_task_path
+        fill_in 'task[substance]', with: 'タスク名です'
+        fill_in 'task[content]', with: '詳細内容です'
+        fill_in 'task[period]', with: DateTime.new(2021, 8, 1, 10, 30)
+        desired_option = '着手中'
+        select desired_option, from: 'task_state_for_progress'
+        check 'test_label1'
+        check 'test_label2'
+        click_button('登録する')
+        sleep 1
+        expect(page).to have_content'test_label2'
+        expect(page).to have_content'test_label1'
+      end
+    end
+    context 'タスクを新規作成時、ラベルを選択した場合' do
+      it '選択したラベルが詳細画面に表示される' do
+        visit new_task_path
+        fill_in 'task[substance]', with: 'タスク名です'
+        fill_in 'task[content]', with: '詳細内容です'
+        fill_in 'task[period]', with: DateTime.new(2021, 8, 1, 10, 30)
+        desired_option = '着手中'
+        select desired_option, from: 'task_state_for_progress'
+        check 'test_label1'
+        check 'test_label2'
+        click_button('登録する')
+        sleep 1
+        click_link('詳細')
+        sleep 2
+        expect(page).to have_content'test_label2'
+        expect(page).to have_content'test_label1'
+      end
+    end
+    context '一覧画面でラベルを選択した場合' do
+      it '選択したラベルだけが含まれるタスクだけが一覧に表示される' do
+        visit new_task_path
+        fill_in 'task[substance]', with: 'このタスクは消えます'
+        fill_in 'task[content]', with: '詳細内容です'
+        fill_in 'task[period]', with: DateTime.new(2021, 8, 1, 10, 30)
+        desired_option = '着手中'
+        select desired_option, from: 'task_state_for_progress'
+        check 'test_label1'
+        click_button('登録する')
+        sleep 1
+        visit new_task_path
+        fill_in 'task[substance]', with: 'タスク名です'
+        fill_in 'task[content]', with: '詳細内容です'
+        fill_in 'task[period]', with: DateTime.new(2021, 8, 1, 10, 30)
+        desired_option = '着手中'
+        select desired_option, from: 'task_state_for_progress'
+        check 'test_label2'
+        click_button('登録する')
+        desired_option = 'test_label2'
+        select desired_option, from: 'label_id'
+        click_button 'Search'
+        sleep 2
+        expect(page).to have_content'test_label2'
+        expect(page).not_to have_content'このタスクは消えます'
+      end
+    end
+  end
 
 end
