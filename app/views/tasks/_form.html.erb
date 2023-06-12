@@ -21,16 +21,17 @@
   <div class="task_period">
   <%= form.label :終了期限 %>
   <%= form.datetime_field :period %>
-</div>
-<div class="task_state_for_progress">
-<%= form.label :ステータス %>
-<%= form.select :state_for_progress, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "選択して下さい" %>
-</div>
-  <div class="task_priority">
-<%= form.label :優先順位 %>
-<%= form.select :priority, [["高", "高"], ["中", "中"], ["低", "低"]], include_blank: "選択して下さい" %>
-</div>
-<%= form.collection_check_boxes(:label_ids, Label.all, :id, :phrase) %>
+  </div>
+  <div class="task_state_for_progress">
+  <%= form.label :ステータス %>
+  <%= form.select :state_for_progress, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "選択して下さい" %>
+  </div>
+    <div class="task_priority">
+  <%= form.label :優先順位 %>
+  <%= form.select :priority, [["高", "高"], ["中", "中"], ["低", "低"]], include_blank: "選択して下さい" %>
+  </div>
+  <%= form.collection_check_boxes(:label_ids, Label.all, :id, :phrase) %>
+<BR>
   <%= form.submit %>
 <% end %>
 

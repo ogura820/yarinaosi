@@ -17,13 +17,25 @@ class TasksController < ApplicationController
     # else 
     # end
     # 最初に作ったコード。なにをしているのかわかりづらい？コードレビューで聞く候補
-    if params[:substance_keyword].present? && params[:progress_keyword].present?
+    if params[:substance_keyword].present? && params[:progress_keyword].present? && params[:label_id].present?
       @tasks = @tasks.search_by_substance(params[:substance_keyword])
                       .search_by_state_for_progress(params[:progress_keyword])
+                      .search_by_label(params[:label_id])
+    elsif params[:substance_keyword].present? && params[:progress_keyword].present?
+      @tasks = @tasks.search_by_substance(params[:substance_keyword])
+                      .search_by_state_for_progress(params[:progress_keyword])
+    elsif params[:substance_keyword].present? && params[:label_id].present?
+      @tasks = @tasks.search_by_substance(params[:substance_keyword])
+                      .search_by_label(params[:label_id])
+    elsif params[:progress_keyword].present? && params[:label_id].present?
+      @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
+                      .search_by_label(params[:label_id])
     elsif params[:substance_keyword].present?
       @tasks = @tasks.search_by_substance(params[:substance_keyword])
     elsif params[:progress_keyword].present?
       @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
+    elsif params[:labbel_id].present?
+      @tasks = @tasks.search_by_label(params[:label_id])
     end
 
   end
