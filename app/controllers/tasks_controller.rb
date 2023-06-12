@@ -8,15 +8,7 @@ class TasksController < ApplicationController
     if params[:sort_priority]
       @tasks = @tasks.reorder('priority')
     end
-
-    # if params[:substance_keyword && :progress_keyword]
-    #   @tasks = @tasks.search_by_substance(params[:substance_keyword])
-    #   if params[:progress_keyword].present?
-    #     @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
-    #   end
-    # else 
-    # end
-    # 最初に作ったコード。なにをしているのかわかりづらい？コードレビューで聞く候補
+    #when,causeを使えばもっと見やすくなる？
     if params[:substance_keyword].present? && params[:progress_keyword].present? && params[:label_id].present?
       @tasks = @tasks.search_by_substance(params[:substance_keyword])
                       .search_by_state_for_progress(params[:progress_keyword])
@@ -55,6 +47,7 @@ class TasksController < ApplicationController
 
   def show
     @task = Task.find(params[:id])
+    @labels = @task.labels.all
   end
 
   def edit

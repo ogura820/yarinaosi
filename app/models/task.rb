@@ -7,7 +7,7 @@ class Task < ApplicationRecord
   #タスクのステータスで絞り込み
   scope :search_by_state_for_progress, -> (serch_progress){where(state_for_progress: serch_progress)}
   #タスクのラベルで絞り込み
-  # scope :search_by_label, -> (label){where(labels: label)}whereで別テーブルはできない
+  # scope :search_by_label, -> (label){where(labels: label)}whereで別テーブルはできないjoinsを使う
   scope :search_by_label, -> (label) { joins(:labels).where(labels: { id: label }) }
   enum priority: { 高: 0, 中: 1, 低: 2 }
   scope :order_by_priority, -> {
