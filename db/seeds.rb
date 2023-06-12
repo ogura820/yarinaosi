@@ -4,11 +4,19 @@ password: "testtest",password_confirmation: "testtest", admin: true )
 User.create(name: "not_admin", email: "notadmin@gmail.com", 
 password: "testtest",password_confirmation: "testtest", id: 999 )
 
+10.times do |n|
+  User.create(name: "not_admin", email: "#{n+1}notadmin@gmail.com", 
+              password: "testtest",password_confirmation: "testtest" )
+end
+
+
 User.all.each do |user|
-  user.tasks.create!(
-    substance: 'タイトル',
-    content: 'テキストテキストテキストテキスト'
-  )
+  10.times do |n|
+    user.tasks.create!(
+      substance: "タイトル#{n+1}",
+      content: 'テキストテキストテキストテキスト'
+    )
+  end
 end
 
 Label.create(phrase:"仕事")
