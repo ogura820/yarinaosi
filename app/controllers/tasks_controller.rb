@@ -26,7 +26,7 @@ class TasksController < ApplicationController
       @tasks = @tasks.search_by_substance(params[:substance_keyword])
     elsif params[:progress_keyword].present?
       @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
-    elsif params[:labbel_id].present?
+    elsif params[:label_id].present?
       @tasks = @tasks.search_by_label(params[:label_id])
     end
 
