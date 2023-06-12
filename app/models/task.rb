@@ -9,5 +9,7 @@ class Task < ApplicationRecord
     order_by = [] 
     CATEGORY_ORDERS.each { |category| order_by << "category=#{category} DESC" }
     order(order_by.join(", "))
-}
+  }
+  has_many :labellings, dependent: :destroy
+  has_many :labels, through: :labellings
 end
