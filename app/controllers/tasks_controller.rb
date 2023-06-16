@@ -8,27 +8,7 @@ class TasksController < ApplicationController
     if params[:sort_priority]
       @tasks = @tasks.reorder('priority')
     end
-    #when,causeを使えばもっと見やすくなる？
-    # if params[:substance_keyword].present? && params[:progress_keyword].present? && params[:label_id].present?
-    #   @tasks = @tasks.search_by_substance(params[:substance_keyword])
-    #                   .search_by_state_for_progress(params[:progress_keyword])
-    #                   .search_by_label(params[:label_id])
-    # elsif params[:substance_keyword].present? && params[:progress_keyword].present?
-    #   @tasks = @tasks.search_by_substance(params[:substance_keyword])
-    #                   .search_by_state_for_progress(params[:progress_keyword])
-    # elsif params[:substance_keyword].present? && params[:label_id].present?
-    #   @tasks = @tasks.search_by_substance(params[:substance_keyword])
-    #                   .search_by_label(params[:label_id])
-    # elsif params[:progress_keyword].present? && params[:label_id].present?
-    #   @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
-    #                   .search_by_label(params[:label_id])
-    # elsif params[:substance_keyword].present?
-    #   @tasks = @tasks.search_by_substance(params[:substance_keyword])
-    # elsif params[:progress_keyword].present?
-    #   @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
-    # elsif params[:label_id].present?
-    #   @tasks = @tasks.search_by_label(params[:label_id])
-    # end
+
     if params[:substance_keyword].present?
       @tasks = @tasks.search_by_substance(params[:substance_keyword])
     end
