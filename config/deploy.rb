@@ -6,7 +6,7 @@ set :application, 'アプリケーション名'
 
 # cloneするgitのレポジトリ
 # （xxxxxxxx：ユーザ名、yyyyyyyy：アプリケーション名）
-set :repo_url, 'https://github.com/ogura820/app_code_reading'
+set :repo_url, 'https://github.com/ogura820/yarinaosi'
 
 # deployするブランチ。デフォルトでmainを使用している場合、masterをmainに変更してください。
 set :branch, ENV['BRANCH'] || 'master'
