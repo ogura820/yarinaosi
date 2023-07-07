@@ -1,25 +1,25 @@
 class TasksController < ApplicationController
   def index
     @tasks = current_user.tasks.order('created_at DESC').page(params[:page]).per(10)
-    if params[:sort_expired]
-      @tasks = @tasks.reorder('period') 
-    end
-
-    if params[:sort_priority]
-      @tasks = @tasks.reorder('priority')
-    end
-
-    if params[:substance_keyword].present?
-      @tasks = @tasks.search_by_substance(params[:substance_keyword])
-    end
-    
-    if params[:progress_keyword].present?
-      @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
-    end
-    
-    if params[:label_id].present?
-      @tasks = @tasks.search_by_label(params[:label_id])
-    end
+      if params[:sort_expired]
+        @tasks = @tasks.reorder('period') 
+      end
+  
+      if params[:sort_priority]
+        @tasks = @tasks.reorder('priority')
+      end
+  
+      if params[:substance_keyword].present?
+        @tasks = @tasks.search_by_substance(params[:substance_keyword])
+      end
+      
+      if params[:progress_keyword].present?
+        @tasks = @tasks.search_by_state_for_progress(params[:progress_keyword])
+      end
+      
+      if params[:label_id].present?
+        @tasks = @tasks.search_by_label(params[:label_id])
+      end
   end
 
   def new
