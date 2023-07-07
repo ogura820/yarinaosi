@@ -13,9 +13,9 @@
 <%= link_to "優先順位でソートする", tasks_path(sort_priority: "true", substance_keyword: params[:substance_keyword], progress_keyword: params[:progress_keyword]),class:"btn btn-outline-dark" %>
 <%= form_with url: tasks_path, method: :get, local: true do |form| %>
   <%= form.label :タスク名検索 %>
-  <%= form.text_field :substance_keyword %>
-<%= form.select :progress_keyword, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "ステータス指定なし" %>
-<%= form.select("label_id", Label.pluck(:phrase, :id), { include_blank: "ラベル指定なし" })  %>
+    <%= form.text_field :substance_keyword %>
+  <%= form.select :progress_keyword, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "ステータス指定なし" %>
+  <%= form.select("label_id", Label.pluck(:phrase, :id), { include_blank: "ラベル指定なし" })  %>
   <%= form.submit 'Search', name: nil %>
 <% end %>
 
@@ -45,10 +45,10 @@
     <td class= "task_priority" %><%= task.priority %></td>
     <td><%= task.user.name %></td>
     <td>
-    <% task.labels.each do |label| %>
-      <%= label.phrase %>
-    <% end %>
-  </td>
+      <% task.labels.each do |label| %>
+        <%= label.phrase %>
+      <% end %>
+    </td>
     <td><%= link_to '詳細', task_path(task.id), class:"btn btn-outline-primary" %></td>
     <td><%= link_to "編集", edit_task_path(task.id), class:"btn btn-outline-success" %></td>
     <td><%= link_to '削除', task_path(task.id), class:"btn btn-outline-danger", method: :delete ,data: { confirm: '本当に削除していいですか？' } %></td>
